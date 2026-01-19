@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+:root {
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+    --radius: 0.5rem;
+    --chart-1: 359 2% 90%;
+    --chart-2: 240 1% 74%;
+    --chart-3: 240 1% 58%;
+    --chart-4: 240 1% 42%;
+    --chart-5: 240 2% 26%;
+    --novel-highlight-default: #ffffff;
+    --novel-highlight-purple: #f6f3f8;
+    --novel-highlight-red: #fdebeb;
+    --novel-highlight-yellow: #fbf4a2;
+    --novel-highlight-blue: #c1ecf9;
+    --novel-highlight-green: #acf79f;
+    --novel-highlight-orange: #faebdd;
+    --novel-highlight-pink: #faf1f5;
+    --novel-highlight-gray: #f1f1ef;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* --background: 30 15% 5%; */
+        /* --foreground: 30 20% 98%; */
+        --card: 30 15% 8%;
+        --card-foreground: 30 20% 98%;
+        --popover: 30 15% 8%;
+        --popover-foreground: 30 20% 98%;
+        --primary: 5 62% 49%;
+        --primary-foreground: 30 20% 98%;
+        --secondary: 30 10% 15%;
+        --secondary-foreground: 30 20% 98%;
+        --muted: 30 10% 15%;
+        --muted-foreground: 30 5% 65%;
+        --accent: 30 10% 20%;
+        --accent-foreground: 30 20% 98%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 30 10% 20%;
+        --input: 30 10% 20%;
+        --ring: 5 62% 49%;
+        --chart-1: 5 62% 49%;
+        --chart-2: 30 50% 60%;
+        --chart-3: 20 40% 50%;
+        --chart-4: 40 30% 40%;
+        --chart-5: 10 20% 30%;
+        --novel-highlight-default: #000000;
+        --novel-highlight-purple: #4a3356;
+        --novel-highlight-red: #6b2020;
+        --novel-highlight-yellow: #5e4d1a;
+        --novel-highlight-blue: #1e3a5f;
+        --novel-highlight-green: #225c28;
+        --novel-highlight-orange: #6b401a;
+        --novel-highlight-pink: #6b2045;
+        --novel-highlight-gray: #3d3d3d;
+    }
+}
+
+@theme inline {
+    /* Standard Shadcn / UI Variables */
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+
+    --radius-md: var(--radius);
+    --radius-sm: calc(var(--radius) - 2px);
+    --radius-lg: calc(var(--radius) + 2px);
+
+    /* Chart Colors */
+    --color-chart-1: hsl(var(--chart-1));
+    --color-chart-2: hsl(var(--chart-2));
+    --color-chart-3: hsl(var(--chart-3));
+    --color-chart-4: hsl(var(--chart-4));
+    --color-chart-5: hsl(var(--chart-5));
+
+    /* Novel Highlight Colors (Hex values, no hsl() needed) */
+    --color-novel-highlight-purple: var(--novel-highlight-purple);
+    --color-novel-highlight-red: var(--novel-highlight-red);
+    --color-novel-highlight-yellow: var(--novel-highlight-yellow);
+    --color-novel-highlight-blue: var(--novel-highlight-blue);
+    --color-novel-highlight-green: var(--novel-highlight-green);
+    --color-novel-highlight-orange: var(--novel-highlight-orange);
+    --color-novel-highlight-pink: var(--novel-highlight-pink);
+    --color-novel-highlight-gray: var(--novel-highlight-gray);
+}
+
+.dark {
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+
+    --chart-1: 359 2% 90%;
+    --chart-2: 240 1% 74%;
+    --chart-3: 240 1% 58%;
+    --chart-4: 240 1% 42%;
+    --chart-5: 240 2% 26%;
+
+    --novel-highlight-default: #000000;
+    --novel-highlight-purple: #3f2c4b;
+    --novel-highlight-red: #5c1a1a;
+    --novel-highlight-yellow: #5c4b1a;
+    --novel-highlight-blue: #1a3d5c;
+    --novel-highlight-green: #1a5c20;
+    --novel-highlight-orange: #5c3a1a;
+    --novel-highlight-pink: #5c1a3a;
+    --novel-highlight-gray: #3a3a3a;
+}
+
+pre {
+    code {
+        background: none;
+        color: inherit;
+        font-size: 0.8rem;
+        padding: 0;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+        color: #616161;
+    }
+
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-attribute,
+    .hljs-tag,
+    .hljs-name,
+    .hljs-regexp,
+    .hljs-link,
+    .hljs-name,
+    .hljs-selector-id,
+    .hljs-selector-class {
+        color: #f98181;
+    }
+
+    .hljs-number,
+    .hljs-meta,
+    .hljs-built_in,
+    .hljs-builtin-name,
+    .hljs-literal,
+    .hljs-type,
+    .hljs-params {
+        color: #fbbc88;
+    }
+
+    .hljs-string,
+    .hljs-symbol,
+    .hljs-bullet {
+        color: #b9f18d;
+    }
+
+    .hljs-title,
+    .hljs-section {
+        color: #faf594;
+    }
+
+    .hljs-keyword,
+    .hljs-selector-tag {
+        color: #70cff8;
+    }
+
+    .hljs-emphasis {
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        font-weight: 700;
+    }
+}

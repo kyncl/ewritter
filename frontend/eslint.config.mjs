@@ -18,6 +18,7 @@ const eslintConfig = defineConfig([
         "build/**",
         "next-env.d.ts",
     ]),
+    // only lint src/ 
     {
         ignores: ["**/*", "!src/**"],
     },
@@ -81,11 +82,12 @@ const eslintConfig = defineConfig([
             // Naming conventions
             "@typescript-eslint/naming-convention": [
                 "error",
-                /* {
+                // Proven to be more troublesome like importing App or Link from NextJs
+                /*{
                     selector: "default",
                     format: ["camelCase"],
                     leadingUnderscore: "allow",
-                }, */
+                },*/
                 {
                     selector: "variable",
                     format: ["camelCase", "UPPER_CASE", "PascalCase"],
