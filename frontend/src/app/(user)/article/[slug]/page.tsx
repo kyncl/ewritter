@@ -15,7 +15,11 @@ export default function Page() {
     useEffect(() => {
         if (specificArticle?.content) {
             try {
+                // Probably would be best to rewrite the JSONContent into zod but jesus novel 
+                // why can't you be more cool less AI shit more cool shit 
                 const parsed = JSON.parse(specificArticle.content) as JSONContent;
+                // using hooks inside other hook is bad, cuz loop can occur
+                // safety: trust me bro (or just read it)
                 // eslint-disable-next-line
                 setArticle(parsed);
             } catch (e) {

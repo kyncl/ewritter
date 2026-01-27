@@ -63,21 +63,29 @@ export const StatefulButton = ({ className, children, ...props }: ButtonProps) =
         );
     };
 
-    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        await animateLoading();
-        await props.onClick?.(event);
-        await animateSuccess();
-    };
-
+    // Reason: If I understand it correctly these are actually passed inside the motion.div so they are used
+    // Don't really know aceternity
     const {
         onClick,
+        // eslint-disable-next-line
         onDrag,
+        // eslint-disable-next-line
         onDragStart,
+        // eslint-disable-next-line
         onDragEnd,
+        // eslint-disable-next-line
         onAnimationStart,
+        // eslint-disable-next-line
         onAnimationEnd,
         ...buttonProps
     } = props;
+
+    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        await animateLoading();
+        onClick?.(event);
+        await animateSuccess();
+    };
+
 
     return (
         <motion.button
@@ -85,11 +93,13 @@ export const StatefulButton = ({ className, children, ...props }: ButtonProps) =
             layoutId="button"
             ref={scope}
             className={cn(
-                "flex min-w-30 cursor-pointer items-center justify-center gap-2 rounded-full bg-green-500 px-4 py-2 font-medium text-white ring-offset-2 transition duration-200 hover:ring-2 hover:ring-green-500 dark:ring-offset-black",
+                "flex min-w-30 cursor-pointer items-center justify-center",
+                "gap-2 rounded-full bg-green-500 px-4 py-2 font-medium text-white",
+                " ring-offset-2 transition duration-200 hover:ring-2 hover:ring-green-500 dark:ring-offset-black",
                 className,
             )}
             {...buttonProps}
-            onClick={handleClick}
+            onClick={(e) => { handleClick(e).catch((err) => console.error(err)) }}
         >
             <motion.div layout className="flex items-center gap-2">
                 <Loader />

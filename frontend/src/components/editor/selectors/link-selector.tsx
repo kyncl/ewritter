@@ -78,6 +78,8 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
                         type='text'
                         placeholder='Paste a link'
                         className='flex-1 bg-background p-1 text-sm outline-none'
+                        // Novel sucks
+                        // eslint-disable-next-line
                         defaultValue={editor.getAttributes('link').href || ''}
                     />
                     {editor.getAttributes('link').href ? (
