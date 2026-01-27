@@ -4,11 +4,15 @@
     --background: #F6EEDB;
     --foreground: #171717;
     --main: #cd3e30;
+    --background-dark: color-mix(in srgb, var(--background), black 50%);
+    --background-light: color-mix(in srgb, var(--background), white 50%);
 }
 
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --color-background-dark: var(--background-dark);
+    --color-background-light: var(--background-light);
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
     --color-main: var(--main);

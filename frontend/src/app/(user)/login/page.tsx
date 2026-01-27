@@ -1,15 +1,11 @@
 'use client';
+import { StatefulButton } from "@/src/components/aceternity/stateful-button";
 import { useAuth } from "@/src/hooks/useAuth";
 import { redirect } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export default function Login() {
-    const { user, login } = useAuth({ middleware: "guest" });
-    const [errors, setErrors] = useState([]);
-
-    useEffect(() => {
-        console.log(errors);
-    }, [errors]);
+    const { user, login, errors } = useAuth({ middleware: "guest" });
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -22,7 +18,12 @@ export default function Login() {
             [name]: value
         }));
     };
-
+    const handleLogin = () => {
+        login({
+            password: loginData.password,
+            email: loginData.email
+        }).catch((err) => { console.log(err) })
+    };
     useEffect(() => {
         if (user)
             redirect("/dashboard");
@@ -33,7 +34,12 @@ export default function Login() {
             <div className="w-full max-w-3xl bg-zinc-900/50 p-8 rounded-2xl border border-white/5 shadow-xl">
                 <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
                 <p className="text-gray-400 mb-8 text-sm">Please enter your details to sign in.</p>
-                <div className="flex flex-col gap-4">
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleLogin();
+                    }}
+                    className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
                         <label className="text-xs font-medium uppercase tracking-wider text-gray-500">Email</label>
                         <input
@@ -56,22 +62,26 @@ export default function Login() {
                         />
                     </div>
 
-                    <button
-                        onClick={() => {
-                            login({
-                                setErrors,
-                                password: loginData.password,
-                                email: loginData.email
-                            }).catch((err) => { console.log(err) })
-                        }
-                        }
-                        className="bg-main
-                        hover:bg-main/80
-                        duration-300
-                    rounded-2xl p-2 mt-5">
-                        Sign In
-                    </button>
-                </div>
+                    <ul>
+                        {Object.entries(errors).map(([field, messages]) => (
+                            <li key={field} className="text-red-500 flex gap-2">
+                                <strong>{field}:</strong>
+                                <ul>
+                                    {messages.map((message, index) => (
+                                        <li key={`${field}-${index}`}>{message}</li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                    <StatefulButton
+                        className="disabled:bg-main/70 
+                        bg-main hover:ring-main
+                        disabled:cursor-default disabled:ring-transparent"
+                        onClick={handleLogin}>
+                        Login
+                    </StatefulButton>
+                </form>
             </div>
         </main >
     );

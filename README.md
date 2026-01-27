@@ -11,4 +11,5 @@ docker compose up --build
 docker compose exec backend php artisan migrate
 docker network create frontend_net
 docker network create backend_net
+docker compose run --rm frontend bun install
 ```

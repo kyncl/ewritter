@@ -1,7 +1,7 @@
 'use client';
 import Link from "next/link";
 import { useAuth } from "../hooks/useAuth";
-import { CreatePost } from "../_Components/CreatePost";
+import { CreateArticle } from "../_Components/CreateArticle";
 
 export default function Home() {
     const { user } = useAuth({ middleware: "guest" });
@@ -25,7 +25,7 @@ export default function Home() {
                         >
                             Go to Dashboard
                         </Link>
-                        <CreatePost />
+                        <CreateArticle />
                     </div>
                 ) : (
                     <Link

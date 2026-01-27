@@ -13,7 +13,16 @@ export const NavBar = () => {
             <div className="flex items-center gap-6">
                 {user ? (
                     <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-400">Hi, {user.name}</span>
+                        <Link
+                            className="
+                            hover:text-gray-200 
+                            text-gray-400
+                            duration-300"
+                            href="/dashboard">
+                            <span className="text-sm">
+                                Hi, {user.name}
+                            </span>
+                        </Link>
                         <button
                             onClick={() => { logout().catch(console.error) }}
                             className="text-sm font-medium hover:text-red-400 transition-colors"

@@ -1,17 +1,22 @@
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    networks:
-      - frontend_net
-    deploy:
-      resources:
-        limits:
-          memory: 512M 
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - WATCHPACK_POLLING=true  # Crucial for Linux/Arch to detect file saves
+      - NODE_ENV=production
+    # command: bun run dev        # Overwrites production 'server.js' with dev server
+    depends_on:
+      - backend
 
   backend:
     build: ./backend
+    volumes:
+      - ./backend:/var/www
     environment:
       - DB_CONNECTION=${DB_CONNECTION}
       - DB_HOST=db

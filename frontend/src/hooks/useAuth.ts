@@ -3,23 +3,18 @@ import { AxiosError, isAxiosError } from 'axios';
 import axios from "@/src/_lib/axios";
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { User } from '../_lib/interfaces/User';
 
-export interface User {
-    id: number;
-    name: string;
-    email: string;
-    email_verified_at?: string;
-}
 export type ValidationErrors = Record<string, string[]>;
-interface AuthProps {
+export interface AuthProps {
     middleware?: 'auth' | 'guest';
     redirectIfAuthenticated?: string;
 }
-interface AuthActionProps {
+export interface AuthActionProps {
     setStatus?: (status: string | null) => void;
     [key: string]: unknown;
 }
-interface LaravelErrorResponse {
+export interface LaravelErrorResponse {
     errors: ValidationErrors;
     message?: string;
 }
@@ -31,7 +26,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
     const params = useParams();
     const [errors, setErrors] = useState<ValidationErrors>({});
 
-    const { data: user, error, mutate } = useSWR<User | undefined, AxiosError<LaravelErrorResponse>>(
+    const { data: user, error, mutate, isLoading } = useSWR<User | undefined, AxiosError<LaravelErrorResponse>>(
         `/api/user`,
         async (): Promise<User | undefined> => {
             try {
@@ -54,7 +49,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         await csrf();
         setErrors({});
 
-        axios
+        return await axios
             .post('/register', props)
             .then(() => mutate())
             .catch((error: AxiosError<LaravelErrorResponse>) => {
@@ -126,22 +121,20 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
     }, [error, mutate]);
 
     useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user) {
-            router.push(redirectIfAuthenticated);
-        }
+        // If we are still fetching the user, sit tight.
+        if (user === undefined && !error) return;
 
-        if (middleware === 'auth' && user && !user.email_verified_at) {
-            router.push('/verify-email');
-        }
-
-        if (window.location.pathname === '/verify-email' && user?.email_verified_at) {
+        if (middleware === 'guest' && user) {
             router.push(redirectIfAuthenticated || '/dashboard');
         }
 
         if (middleware === 'auth' && error) {
-            logout().catch(err => console.error('Logout failed:', err));
+            // Only logout if the error is actually a 401 (Unauthenticated)
+            if (error.response?.status === 401) {
+                logout().catch(err => console.error('Logout failed:', err));
+            }
         }
-    }, [user, error, middleware, redirectIfAuthenticated, router, logout]);
+    }, [user, error, isLoading, router, logout, middleware, redirectIfAuthenticated]);
 
     return {
         errors,

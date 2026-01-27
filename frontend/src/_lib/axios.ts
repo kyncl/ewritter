@@ -6,9 +6,8 @@ const axios = Axios.create({
         'X-Requested-With': 'XMLHttpRequest',
     },
     withCredentials: true,
+    withXSRFToken: true,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN'
 });
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
-axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 export default axios;

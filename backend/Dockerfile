@@ -1,8 +1,8 @@
 FROM php:8.4-fpm-alpine
 
 # Install system dependencies & PHP extensions for Postgres
-RUN apk add --no-cache \
-    libpq-dev \
+RUN apk update && apk add --no-cache \
+    postgresql-dev \
     dcron \
     libcap \
     && docker-php-ext-install pdo pdo_pgsql

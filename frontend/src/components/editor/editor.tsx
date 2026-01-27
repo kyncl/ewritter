@@ -1,5 +1,9 @@
 'use client'
 
+// it's from this video
+// https://www.youtube.com/watch?v=hP0TcRcr95Q&t=200s
+// WARNING It's really old so many things had to be redone
+
 import { useState } from 'react'
 
 import {
@@ -28,8 +32,8 @@ import { MathSelector } from '@/src/components/editor/selectors/math-selector'
 import { ColorSelector } from '@/src/components/editor/selectors/color-selector'
 import { Separator } from '@/src/components/ui/separator'
 
-import "../../app/prosemirror.css";
-import "../../app/novelGlobal.css";
+import "@/src/style/prosemirror.css";
+import "@/src/style/novelGlobal.css";
 
 const extensions = [...defaultExtensions, slashCommand]
 export const defaultEditorContent = {
@@ -44,10 +48,11 @@ export const defaultEditorContent = {
 
 interface EditorProps {
     initialValue?: JSONContent
-    onChange: (content: string) => void
+    onChange: (content: string) => void,
+    preview?: boolean
 }
 
-export default function Editor({ initialValue, onChange }: EditorProps) {
+export default function Editor({ initialValue, onChange, preview }: EditorProps) {
     const [openNode, setOpenNode] = useState(false)
     const [openColor, setOpenColor] = useState(false)
     const [openLink, setOpenLink] = useState(false)
@@ -66,12 +71,14 @@ export default function Editor({ initialValue, onChange }: EditorProps) {
         <div className='relative w-full'>
             <EditorRoot>
                 <EditorContent
+                    autofocus
+                    editable={!preview}
                     immediatelyRender={false}
                     initialContent={initialValue}
                     extensions={extensions}
                     className='min-h-screen
                     rounded-xl
-                    border p-4'
+                    p-1'
                     editorProps={{
                         handleDOMEvents: {
                             keydown: (_view, event) => handleCommandNavigation(event)
@@ -82,7 +89,7 @@ export default function Editor({ initialValue, onChange }: EditorProps) {
                         }
                     }}
                     onUpdate={({ editor }) => {
-                        onChange(editor.getHTML())
+                        onChange(JSON.stringify(editor.getJSON()))
                     }}
                 >
                     <EditorCommand className='z-50 h-auto max-h-82.5 overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all'>
