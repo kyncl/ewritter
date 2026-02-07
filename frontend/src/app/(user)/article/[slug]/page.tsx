@@ -6,7 +6,6 @@ import { redirect, useParams } from "next/navigation";
 import { JSONContent } from "novel";
 import { useEffect, useState } from "react";
 
-
 export default function Page() {
     const params = useParams();
     const articleId = parseInt((params.slug ?? "")?.toString());
