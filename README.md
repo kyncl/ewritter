@@ -3,8 +3,6 @@ Is web platform that connects people who wants to bitch about things, write arti
 [Link](https://ewritter.kyncl.dev/)
 
 # Install 
-Change in `docker-compose-yml` `NEXT_PUBLIC_API_URL` 
-to different url (if locally: `http://localhost:8000`)
 ```bash
 cd frontend
 bun install
