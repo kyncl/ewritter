@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - HOSTNAME=0.0.0.0
-      - NEXT_PUBLIC_API_URL=https://ewritter.kyncl.dev/api
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
       - NODE_ENV=production
     networks:
       - frontend_net
