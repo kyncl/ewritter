@@ -1,0 +1,13 @@
+services:
+  frontend:
+    networks:
+      - proxy_net
+
+  nginx:
+    ports: !override []
+    networks:
+      - proxy_net
+
+networks:
+  proxy_net:
+    external: true

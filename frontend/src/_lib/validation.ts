@@ -3,7 +3,7 @@ import { RegisterValues } from "./interfaces/register";
 export const validateRegistration = (registerData: RegisterValues) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_]{3,15}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]{8,}$/;
     const emailErrMsg = registerData.email && !emailRegex.test(registerData.email)
         ? "Invalid email format"
         : null;

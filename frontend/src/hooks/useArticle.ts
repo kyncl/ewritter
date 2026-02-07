@@ -38,7 +38,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
     const [errors, setErrors] = useState<ValidationErrors>({});
     const [loading, setLoading] = useState<boolean>(false);
 
-    const fetchUrl = userId ? `/articles/${userId}` : '/articles';
+    const fetchUrl = userId ? `/api/articles/${userId}` : '/api/articles';
     const { data: articles, error, mutate } = useSWR<Article[] | undefined, AxiosError<LaravelErrorResponse>>(
         fetchUrl,
         async () => {
@@ -57,10 +57,10 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
     );
 
     const { data: allArticles } = useSWR<Article[], AxiosError<LaravelErrorResponse>>(
-        "/articles",
+        "/api/articles",
         async () => {
             try {
-                const fechedArticles = await axios.get<Article[]>("/articles");
+                const fechedArticles = await axios.get<Article[]>("/api/articles");
                 return fechedArticles.data;
             }
             catch (err: unknown) {
@@ -74,7 +74,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
     );
 
     const { data: paginatedArticles } = useSWR<PaginatedResponse, AxiosError>(
-        `/articles?page=${page}`,
+        `/api/articles?page=${page}`,
         async (url: string) => {
             const response = await axios.get<PaginatedResponse>(url);
             return response.data;
@@ -82,7 +82,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
     );
 
     const { data: specificArticle } = useSWR<Article, AxiosError>(
-        articleId ? `/article/${articleId}` : null,
+        articleId ? `/api/article/${articleId}` : null,
         async (url: string) => {
             const response = await axios.get<Article>(url);
             return response.data;
@@ -90,7 +90,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
     );
 
     const { data: paginatedNonUserArticles } = useSWR<PaginatedResponse, AxiosError>(
-        userId ? `/articles/${userId}/non/user?page=${page}` : null,
+        userId ? `/api/articles/${userId}/non/user?page=${page}` : null,
         async (url: string) => {
             const response = await axios.get<PaginatedResponse>(url);
             return response.data;
@@ -106,7 +106,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
         setLoading(true);
 
         try {
-            await axios.post('/articleCreate', data)
+            await axios.post('/api/articleCreate', data)
                 .then(() => mutate()).catch((error: AxiosError<LaravelErrorResponse>) => {
                     if (error.response?.status === 422) {
                         setErrors(error.response.data.errors);
@@ -126,7 +126,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
         setLoading(true);
 
         try {
-            await axios.put(`/articleUpdate/${id}`, data)
+            await axios.put(`/api/articleUpdate/${id}`, data)
                 .then(() => mutate()).catch((error: AxiosError<LaravelErrorResponse>) => {
                     if (isAxiosError(error) && error.response?.status === 422) {
                         setErrors(error.response.data.errors);
@@ -146,7 +146,7 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
         setLoading(true);
 
         try {
-            await axios.delete(`/article/${id}`)
+            await axios.delete(`/api/article/${id}`)
                 .then(() => mutate());
             return true;
         } catch (error: unknown) {

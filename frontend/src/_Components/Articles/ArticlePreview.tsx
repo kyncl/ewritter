@@ -27,14 +27,21 @@ interface ArticlePreviwProps {
 export const ArticlePreview = ({ articleHeader, article, setArticle }: ArticlePreviwProps) => {
     let articleSave: JSONContent = EMPTY_ARTICLE;
     try {
-        if (typeof article === "string")
-            articleSave = JSON.parse(article) as JSONContent
-        else
+        if (typeof article === "string") {
+            // SAFE: I don't care why double stringification is a thing?
+            // eslint-disable-next-line
+            let parsed = JSON.parse(article);
+            if (typeof parsed === "string") {
+                // eslint-disable-next-line
+                parsed = JSON.parse(parsed);
+            }
+            articleSave = parsed as JSONContent;
+        } else {
             articleSave = article;
-    }
-    catch {
+        }
+    } catch {
         console.warn("Couldn't get savedArticle");
-    };
+    }
 
     return (
         <div className="prose prose-invert max-w-none animate-in slide-in-from-bottom-2 duration-300">
