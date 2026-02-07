@@ -1,0 +1,64 @@
+# ==============================================================================
+# SYNC CONFIGURATION
+# Supported naming: camelCase, snake_case, kebab-case, or flatcase.
+# The parser ignores internal whitespace and is case-insensitive.
+# ==============================================================================
+
+# --- CONFLICT RESOLUTION ---
+# How to handle files that exist in both locations.
+# Values: newer, older, source, destination, skip, ask
+# Formats: prefer-newer, prefer_newer, newerversion
+prioritization = "prefer_newer_version"
+
+
+# --- ON UNIQUE FILES ---
+# Action to take when a file exists in only one location.
+# Options: 
+#   - skip: Do nothing
+#   - mirror_source: Destination becomes identical to Source (deletes orphans in Destination)
+#   - mirror_destination: Source becomes identical to Destination (deletes orphans in Source)
+#   - add_new: Copy files to the other side without deleting anything
+#   - caching_system: Stage files for later processing
+#   - ask: Prompt user for action
+on_unique = "caching_system"
+
+# List of file patterns or paths to exclude (e.g., ["*.tmp", "node_modules/"])
+ignore = []
+
+# --- VALID CONNECTIONS TYPES --- 
+# - Local
+# - SFTP
+# If you want to have source that is not local you need to define the source.credentials and propriate value
+
+[source]
+connection_type = "Local"
+root_path = "./"
+number_of_connections = 0
+
+[destination]
+connection_type = "SFTP"
+root_path = "apps/ewritter"
+number_of_connections = 1
+
+[destination.credentials]
+username = "kyncl"
+host = "kyncl.dev"
+port = 22
+# If you want to use private key instead of password
+private_key = "Ed25519"
+
+[performance]
+# The maximum number of concurrent operations allowed
+# If encounter error due to a too many requests (big folder, slower server,...) 
+# this is recommended to set to a lower value
+max_operations = 10
+
+# Max file size allowed (Current: 17MB). 
+# Format is in bytes. (17825792 bytes = 17 MiB)
+max_file_size = 17825792
+
+# If true, skip files based on .gitignore in the source directory
+use_gitignore = true 
+
+# If you want use caching asking or skipping are not supported
+use_caching = false 
