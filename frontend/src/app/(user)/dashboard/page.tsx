@@ -10,16 +10,16 @@ import { useState } from "react";
 
 export default function Dashboard() {
     const { user } = useAuth({ middleware: "auth" });
-    if (typeof user === "undefined")
-        redirect("/")
+    if (user === null)
+        redirect("/login")
     const [page, setPage] = useState(1);
-    const { articles, deleteArticle, paginatedNonUserArticles } = useArticle(user.id, page);
+    const { articles, paginatedNonUserArticles } = useArticle(user?.id, page);
 
     return (
         <main>
             <h1 className="font-bold text-3xl p-5">Dashboard</h1>
             {articles?.length ?? 0 > 0 ?
-                <UsersArticles articles={articles} deleteArticle={deleteArticle} />
+                <UsersArticles userId={user?.id} />
                 : ""}
             <h2 className="text-2xl font-semibold text-center p-5 pb-0 ml-3">Articles that could interested you</h2>
             <div className="p-4">

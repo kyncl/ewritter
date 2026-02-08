@@ -36,7 +36,7 @@ class ArticleController extends Controller
 
     public function showArticle($id)
     {
-        $article = Article::findOrFail($id);
+        $article = Article::with("users")->findOrFail($id);
         return response()->json($article);
     }
 
@@ -63,6 +63,13 @@ class ArticleController extends Controller
             'user_ids' => 'array',
             'user_ids.*' => 'exists:users,id',
         ]);
+        $isOwner = $article->users()
+            ->where('user_id', auth()->guard()->id())
+            ->exists();
+
+        if (! $isOwner) {
+            return response()->json(['message' => 'You are not authorized to change this article.'], 403);
+        }
         $article->update($request->only(['header', 'content']));
         if ($request->has('user_ids')) {
             $article->users()->sync($validated['user_ids']);
@@ -72,7 +79,7 @@ class ArticleController extends Controller
 
     public function getByUser($userId)
     {
-        $user = \App\Models\User::findOrFail($userId);
+        $user = User::findOrFail($userId);
         return response()->json($user->articles);
     }
 
@@ -82,13 +89,16 @@ class ArticleController extends Controller
             $query->where('user_id', $userId);
         })
             ->with('users')
+            ->latest()
             ->paginate(10);
         return response()->json($articles);
     }
 
     public function list()
     {
-        $articles = Article::with('users')->paginate(10);
+        $articles = Article::with('users')
+            ->latest()
+            ->paginate(10);
         return response()->json($articles);
     }
 }

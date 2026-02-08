@@ -8,15 +8,16 @@ import { ArticlePreview } from "@/src/_Components/Articles/ArticlePreview";
 import { ArticleEditor } from "@/src/_Components/Articles/ArticleEditor";
 import { JSONContent } from "novel";
 import { StatefulButton } from "@/src/components/aceternity/stateful-button";
-import { useArticle } from "@/src/hooks/useArticle";
 import { redirect, useRouter } from "next/navigation";
 import { useAuth } from "@/src/hooks/useAuth";
+import { useSpecificArticle } from "@/src/hooks/useSpecificArticle";
 
 export default function ArticleCreator() {
     const { user } = useAuth({ middleware: "auth" });
+    if (user === null)
+        redirect("/login");
     const router = useRouter();
-    if (!user) redirect("/");
-    const { createArticle } = useArticle();
+    const { createArticle } = useSpecificArticle();
     const [article, setArticle] = useState<string | JSONContent>(() => {
         // server render doesn't have window
         if (typeof window !== "undefined") {
@@ -119,6 +120,8 @@ export default function ArticleCreator() {
                         font-bold hover:brightness-130 
                         transition-all shadow-lg 
                         hover:ring-main
+                        border-transparent
+                        ring-transparent
                         shadow-main/20">
                     Publish Post
                 </StatefulButton>

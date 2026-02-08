@@ -1,3 +1,5 @@
+'use client';
+
 import useSWR from 'swr';
 import { AxiosError, isAxiosError } from 'axios';
 import axios from "@/src/_lib/axios";
@@ -26,9 +28,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
     const params = useParams();
     const [errors, setErrors] = useState<ValidationErrors>({});
 
-    const { data: user, error, mutate, isLoading } = useSWR<User | undefined, AxiosError<LaravelErrorResponse>>(
+    const { data: user, error, mutate, isLoading } = useSWR<User | null, AxiosError<LaravelErrorResponse>>(
         `/api/user`,
-        async (): Promise<User | undefined> => {
+        async (): Promise<User | null> => {
             try {
                 const res = await axios.get<User>('/api/user');
                 return res.data;
@@ -36,7 +38,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
                 if (isAxiosError(err)) {
                     if (err.response?.status !== 409) throw err;
                     router.push('/api/verify-email');
-                    return undefined;
+                    return null;
                 }
                 throw err;
             }
@@ -124,9 +126,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProps = {})
         // If we are still fetching the user, sit tight.
         if (user === undefined && !error) return;
 
-        if (middleware === 'guest' && user) {
+        /* if (middleware === 'guest' && user) {
             router.push(redirectIfAuthenticated || '/dashboard');
-        }
+        } */
 
         if (middleware === 'auth' && error) {
             // Only logout if the error is actually a 401 (Unauthenticated)

@@ -1,4 +1,4 @@
-import { EMPTY_ARTICLE } from "@/src/_lib/constants";
+import { DEFAULT_ARTICLE, EMPTY_ARTICLE } from "@/src/_lib/constants";
 import Editor from "@/src/components/editor/editor";
 import { JSONContent } from "novel";
 import { Dispatch, SetStateAction } from "react";
@@ -12,7 +12,7 @@ interface ArticleEditorProps {
 
 
 export const ArticleEditor = ({ articleHeader, article, setArticleHeader, setArticle }: ArticleEditorProps) => {
-    let articleSave: JSONContent = EMPTY_ARTICLE;
+    let articleSave: JSONContent = DEFAULT_ARTICLE;
     try {
         if (typeof article === "string")
             articleSave = JSON.parse(article) as JSONContent

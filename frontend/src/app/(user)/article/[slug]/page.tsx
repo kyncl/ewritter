@@ -1,39 +1,62 @@
-'use client';
-
-import { ArticlePreview } from "@/src/_Components/Articles/ArticlePreview";
-import { useArticle } from "@/src/hooks/useArticle";
-import { redirect, useParams } from "next/navigation";
+import { ArticleWrapper } from "@/src/_Components/Articles/ArticleWrapper";
+import { Article } from "@/src/hooks/useArticle";
 import { JSONContent } from "novel";
-import { useEffect, useState } from "react";
 
-export default function Page() {
-    const params = useParams();
-    const articleId = parseInt((params.slug ?? "")?.toString());
-    const { specificArticle } = useArticle(null, 1, articleId);
-    const [article, setArticle] = useState<JSONContent | string>(specificArticle?.content ?? "");
-    useEffect(() => {
-        if (specificArticle?.content) {
-            try {
-                // Probably would be best to rewrite the JSONContent into zod but jesus novel 
-                // why can't you be more cool less AI shit more cool shit 
-                const parsed = JSON.parse(specificArticle.content) as JSONContent;
-                // using hooks inside other hook is bad, cuz loop can occur
-                // safety: trust me bro (or just read it)
-                // eslint-disable-next-line
-                setArticle(parsed);
-            } catch (e) {
-                console.error("Parse error", e);
-            }
+export function getPlainText(node: JSONContent | undefined): string {
+    if (node?.type === 'text' && node.text) {
+        return node.text;
+    }
+    if (node?.content && Array.isArray(node.content)) {
+        return node.content.map(child => getPlainText(child)).join(' ');
+    }
+    return '';
+}
+
+async function getArticle(id: number) {
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const url = `${baseUrl}/api/article/${id}`;
+    console.log(`[Server Fetch] Attempting to reach: ${url}`);
+    try {
+        const res = await fetch(url, {
+            cache: 'no-store',
+            signal: AbortSignal.timeout(5000),
+        });
+
+        if (!res.ok) {
+            console.error(`[Server Fetch] Status: ${res.status} for ID: ${id}`);
+            const errorBody = await res.text();
+            console.error(`[Server Fetch] Response Body snippet: ${errorBody.substring(0, 100)}`);
+            return null;
         }
-    }, [specificArticle]);
-    if (!isFinite(articleId)) return redirect("/");
+        const article = await res.json() as Article;
+        const content = JSON.parse(article.content) as JSONContent;
+        return {
+            article,
+            content
+        };
+    } catch (error: unknown) {
+        console.error("[Server Fetch] Network Error:");
+        console.error(error);
+        return null;
+    }
+}
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+    const resolvedParams = await params;
+    const articleId = parseInt(resolvedParams.slug);
+    if (isNaN(articleId)) return <div>Invalid ID</div>;
+    const articleData = await getArticle(articleId);
+    const articleEditorData = articleData?.article;
+    const preContent = articleData?.content;
+    if (!articleData) return <div>Article not found</div>;
     return (
         <div className="p-5">
-            <ArticlePreview
-                articleHeader={specificArticle?.header ?? ""}
-                article={article}
-                setArticle={setArticle}
-            />
+            <article className="sr-only">
+                <h1>{preContent?.header}</h1>
+                <p>{getPlainText(preContent)}</p>
+            </article>
+
+            <ArticleWrapper initialArticle={articleEditorData} />
         </div>
     );
 }

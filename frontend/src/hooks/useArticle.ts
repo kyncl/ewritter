@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 import { AxiosError, isAxiosError } from 'axios';
 import axios from "@/src/_lib/axios";
-import { useState } from 'react';
-import { LaravelErrorResponse, ValidationErrors } from './useAuth';
+import { LaravelErrorResponse } from './useAuth';
 
 export interface Article {
     id: number;
@@ -34,10 +33,7 @@ export interface ArticlePayload {
     user_ids: number[];
 }
 
-export const useArticle = (userId: number | null = null, page: number = 1, articleId: number | null = null) => {
-    const [errors, setErrors] = useState<ValidationErrors>({});
-    const [loading, setLoading] = useState<boolean>(false);
-
+export const useArticle = (userId: number | null = null, page: number = 1) => {
     const fetchUrl = userId ? `/api/articles/${userId}` : '/api/articles';
     const { data: articles, error, mutate } = useSWR<Article[] | undefined, AxiosError<LaravelErrorResponse>>(
         fetchUrl,
@@ -55,36 +51,10 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
             }
         }
     );
-
-    const { data: allArticles } = useSWR<Article[], AxiosError<LaravelErrorResponse>>(
-        "/api/articles",
-        async () => {
-            try {
-                const fechedArticles = await axios.get<Article[]>("/api/articles");
-                return fechedArticles.data;
-            }
-            catch (err: unknown) {
-                if (isAxiosError(err)) {
-                    if (err.response?.status !== 409) throw err;
-                    return [];
-                }
-                throw err;
-            }
-        }
-    );
-
     const { data: paginatedArticles } = useSWR<PaginatedResponse, AxiosError>(
         `/api/articles?page=${page}`,
         async (url: string) => {
             const response = await axios.get<PaginatedResponse>(url);
-            return response.data;
-        }
-    );
-
-    const { data: specificArticle } = useSWR<Article, AxiosError>(
-        articleId ? `/api/article/${articleId}` : null,
-        async (url: string) => {
-            const response = await axios.get<Article>(url);
             return response.data;
         }
     );
@@ -96,79 +66,11 @@ export const useArticle = (userId: number | null = null, page: number = 1, artic
             return response.data;
         }
     );
-
-    const csrf = () => axios.get('/sanctum/csrf-cookie');
-
-    // 2. Create Article
-    const createArticle = async (data: ArticlePayload) => {
-        await csrf();
-        setErrors({});
-        setLoading(true);
-
-        try {
-            await axios.post('/api/articleCreate', data)
-                .then(() => mutate()).catch((error: AxiosError<LaravelErrorResponse>) => {
-                    if (error.response?.status === 422) {
-                        setErrors(error.response.data.errors);
-                    }
-                    throw error;
-                });
-            return true;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // 3. Update Article
-    const updateArticle = async (id: number, data: Partial<ArticlePayload>) => {
-        await csrf();
-        setErrors({});
-        setLoading(true);
-
-        try {
-            await axios.put(`/api/articleUpdate/${id}`, data)
-                .then(() => mutate()).catch((error: AxiosError<LaravelErrorResponse>) => {
-                    if (isAxiosError(error) && error.response?.status === 422) {
-                        setErrors(error.response.data.errors);
-                        throw error;
-                    }
-                })
-            return true;
-        }
-        finally {
-            setLoading(false);
-        }
-    };
-
-    // 4. Delete Article
-    const deleteArticle = async (id: number) => {
-        await csrf();
-        setLoading(true);
-
-        try {
-            await axios.delete(`/api/article/${id}`)
-                .then(() => mutate());
-            return true;
-        } catch (error: unknown) {
-            console.error("Delete failed", error);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return {
         articles,
-        allArticles,
         paginatedArticles,
-        specificArticle,
         paginatedNonUserArticles,
         isLoading: !error && !articles,
-        isActionLoading: loading,
-        errors,
-        createArticle,
-        updateArticle,
-        deleteArticle,
         refreshArticles: mutate
     };
 };

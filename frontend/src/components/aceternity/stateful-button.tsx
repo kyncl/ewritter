@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { motion, useAnimate } from "motion/react";
 import { cn } from "@/src/_lib/utils";

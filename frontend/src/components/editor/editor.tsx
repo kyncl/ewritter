@@ -71,7 +71,6 @@ export default function Editor({ initialValue, onChange, preview }: EditorProps)
         <div className='relative w-full'>
             <EditorRoot>
                 <EditorContent
-                    autofocus
                     editable={!preview}
                     immediatelyRender={false}
                     initialContent={initialValue}

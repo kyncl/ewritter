@@ -16,7 +16,8 @@ export default function Register() {
     const [registerData, setRegisterData] = useState({
         email: '',
         password: '',
-        username: ''
+        username: '',
+        password_confirmation: ''
     });
     const { emailErrMsg, usernameErrMsg, passwordErrMsg } = validateRegistration(registerData);
 
@@ -31,7 +32,7 @@ export default function Register() {
         register({
             name: registerData.username,
             password: registerData.password,
-            password_confirmation: registerData.password,
+            password_confirmation: registerData.password_confirmation,
             email: registerData.email
         }).catch((err) => { console.warn(err) })
     };
@@ -75,6 +76,17 @@ export default function Register() {
                             type="password"
                             name="password"
                             value={registerData.password}
+                            className="w-full bg-black border border-white/10 p-3 rounded-xl focus:ring-2 focus:ring-main focus:border-transparent outline-none transition-all"
+                            placeholder="••••••••"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-medium uppercase tracking-wider text-gray-500">Password Confirmation</label>
+                        <input
+                            onChange={handleChange}
+                            type="password"
+                            name="password_confirmation"
+                            value={registerData.password_confirmation}
                             className="w-full bg-black border border-white/10 p-3 rounded-xl focus:ring-2 focus:ring-main focus:border-transparent outline-none transition-all"
                             placeholder="••••••••"
                         />
