@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     if (!articles) return (<main>No articles :(</main>)
 
     return (
-        <main>
+        <main className="flex flex-col gap-2 p-3">
             {articles?.data.map((article) =>
                 <div key={article.id} className="flex flex-wrap gap-2 mt-1">
                     {article.users?.map((articleUser) =>
