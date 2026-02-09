@@ -5,8 +5,9 @@ Is web platform that connects people who wants to bitch about things, write arti
 # Run
 - Locally
 ```bash
+docker compose down --remove-orphans
 docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
-docker exec backend composer install
+docker exec ewritter-backend-1 composer install
 ``` 
 - Production
 ```bash

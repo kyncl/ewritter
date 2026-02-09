@@ -54,7 +54,7 @@ export const ArticlePreview = ({ specificArticle, article, setArticle, articleHe
 
     return (
         <div className="prose prose-invert max-w-none animate-in slide-in-from-bottom-2 duration-300">
-            <h1 className="text-5xl font-extrabold mb-8">{articleHeader || specificArticle?.header || "Untitled Post"}</h1>
+            <h1 className="text-5xl font-extrabold mb-8">{articleHeader || specificArticle?.header || "Untitled Article"}</h1>
             <div className="flex flex-col gap-2 text-sm text-foreground/60 mb-8 not-prose">
                 <div className="flex items-center gap-2">
                     <span className="font-semibold text-foreground">Authors:</span>

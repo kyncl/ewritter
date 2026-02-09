@@ -33,7 +33,7 @@ export default function Login() {
         <main className="min-h-[80vh] flex flex-col justify-center items-center px-4">
             <div className="w-full max-w-3xl bg-zinc-900/50 p-8 rounded-2xl border border-white/5 shadow-xl">
                 <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
-                <p className="text-gray-400 mb-8 text-sm">Please enter your details to sign in.</p>
+                <p className="text-gray-400 mb-8 text-sm">Please enter your details to log in.</p>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -79,7 +79,7 @@ export default function Login() {
                         bg-main hover:ring-main
                         disabled:cursor-default disabled:ring-transparent"
                         onClick={handleLogin}>
-                        Login
+                        Log in
                     </StatefulButton>
                 </form>
             </div>

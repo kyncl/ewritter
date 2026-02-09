@@ -1,4 +1,6 @@
-import { HomeCTA } from "../_Components/HomeCTA";
+import Link from "next/link";
+import { HomeClient } from "../_Components/HomeClient";
+import { HomeWelcomingMsg } from "../_Components/HomeWelcomingMsg";
 
 export default function Home() {
     return (
@@ -9,7 +11,15 @@ export default function Home() {
             <p className="text-gray-400 text-lg md:text-xl max-w-2xl mb-10">
                 Platform that connects people who want to bitch about things.
             </p>
-            <HomeCTA />
+            <HomeWelcomingMsg />
+            <Link
+                href="/articleList/1"
+                className="px-8 py-4 bg-main text-white 
+                rounded-full font-bold hover:scale-105 transition-transform"
+            >
+                Articles
+            </Link>
+            <HomeClient />
         </main>
     );
 }

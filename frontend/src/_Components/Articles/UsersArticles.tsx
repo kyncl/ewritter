@@ -1,19 +1,19 @@
 "use client";
 import { copyLink } from "@/src/_lib/utils";
 import { useArticle } from "@/src/hooks/useArticle";
+import { useAuth } from "@/src/hooks/useAuth";
 import { useSpecificArticle } from "@/src/hooks/useSpecificArticle";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 import { FaChevronDown, FaEdit, FaShare, FaTrash } from "react-icons/fa";
 
-interface UsersArticlesProps {
-    userId: number | undefined
-}
-
-export const UsersArticles = ({ userId }: UsersArticlesProps) => {
-    const { articles, refreshArticles } = useArticle(userId);
+export const UsersArticles = () => {
+    const { user } = useAuth({ middleware: "auth" });
+    const { articles, refreshArticles } = useArticle(user?.id);
     const { deleteArticle } = useSpecificArticle();
     const [copySuccess, setCopySuccess] = useState(false);
+    if (articles?.length === 0)
+        return (<></>);
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return "Unknown";
@@ -53,7 +53,7 @@ export const UsersArticles = ({ userId }: UsersArticlesProps) => {
                     {articles?.map((article) => (
                         <div
                             key={article.id}
-                            className="group/card bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl p-6 transition-all duration-300 relative overflow-hidden"
+                            className="group/card bg-background-dark/35 border border-white/10 rounded-2xl p-6 transition-all duration-300 relative overflow-hidden"
                         >
                             <div className="flex flex-col gap-2 relative z-10">
                                 <h3 className="text-2xl font-bold truncate pr-10">

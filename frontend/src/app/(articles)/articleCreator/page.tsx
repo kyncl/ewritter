@@ -72,7 +72,7 @@ export default function ArticleCreator() {
         <main className="max-w-5xl mx-auto px-6 py-12">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-white/10 pb-6">
                 <div>
-                    <h1 className="text-4xl font-bold tracking-tight">Create Post</h1>
+                    <h1 className="text-4xl font-bold tracking-tight">Create Article</h1>
                     <p className="text-gray-400 mt-2">Share your thoughts with the world.</p>
                 </div>
                 <div className="flex bg-zinc-900 p-1 rounded-xl border border-white/5">
@@ -123,7 +123,7 @@ export default function ArticleCreator() {
                         border-transparent
                         ring-transparent
                         shadow-main/20">
-                    Publish Post
+                    Publish Article
                 </StatefulButton>
             </div>
         </main>
